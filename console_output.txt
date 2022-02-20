@@ -1,0 +1,97 @@
+Function Address : 0x769335B0
+Real Function Address : 0x7651F600
+Function Size : 251
+0x76400000:     push            0x18
+0x76400002:     push            0x765d5ae0
+0x76400007:     call            0x764257c0
+0x7640000c:     xor             ecx, ecx
+0x7640000e:     mov             dword ptr [ebp - 0x20], ecx
+0x76400011:     mov             dword ptr [ebp - 0x1c], ecx
+0x76400014:     mov             esi, dword ptr [ebp + 0x14]
+0x76400017:     test            esi, esi
+0x76400019:     je              0x7640001d
+0x7640001b:     mov             dword ptr [esi], ecx
+0x7640001d:     mov             edi, dword ptr [ebp + 8]
+0x76400020:     cmp             edi, -0xc
+0x76400023:     je              0x76431ce8
+0x76400029:     cmp             edi, -0xb
+0x7640002c:     je              0x76431cd7
+0x76400032:     cmp             edi, -0xa
+0x76400035:     je              0x76431cc6
+0x7640003b:     mov             ebx, dword ptr [ebp + 0x18]
+0x7640003e:     push            ecx
+0x7640003f:     test            ebx, ebx
+0x76400041:     je              0x764000a7
+0x76400043:     mov             dword ptr [ebx], 0x103
+0x76400049:     mov             eax, dword ptr [ebx + 8]
+0x7640004c:     mov             dword ptr [ebp - 0x28], eax
+0x7640004f:     mov             eax, dword ptr [ebx + 0xc]
+0x76400052:     mov             dword ptr [ebp - 0x24], eax
+0x76400055:     lea             eax, [ebp - 0x28]
+0x76400058:     push            eax
+0x76400059:     push            dword ptr [ebp + 0x10]
+0x7640005c:     push            dword ptr [ebp + 0xc]
+0x7640005f:     push            ebx
+0x76400060:     mov             eax, dword ptr [ebx + 0x10]
+0x76400063:     and             al, 1
+0x76400065:     movzx           eax, al
+0x76400068:     neg             eax
+0x7640006a:     sbb             eax, eax
+0x7640006c:     not             eax
+0x7640006e:     and             eax, ebx
+0x76400070:     push            eax
+0x76400071:     push            ecx
+0x76400072:     push            dword ptr [ebx + 0x10]
+0x76400075:     push            edi
+0x76400076:     call            dword ptr [0x765ec7c8]
+0x7640007c:     mov             ecx, eax
+0x7640007e:     mov             edx, 0xc0000000
+0x76400083:     and             ecx, edx
+0x76400085:     cmp             eax, 0x103
+0x7640008a:     jne             0x764000e0
+0x7640008c:     mov             ecx, eax
+0x7640008e:     call            0x76401c90
+0x76400093:     xor             eax, eax
+0x76400095:     mov             ecx, dword ptr [ebp - 0x10]
+0x76400098:     mov             dword ptr fs:[0], ecx
+0x7640009f:     pop             ecx
+0x764000a0:     pop             edi
+0x764000a1:     pop             esi
+0x764000a2:     pop             ebx
+0x764000a3:     leave
+0x764000a4:     ret             0x14
+0x764000a7:     push            ecx
+0x764000a8:     push            dword ptr [ebp + 0x10]
+0x764000ab:     push            dword ptr [ebp + 0xc]
+0x764000ae:     lea             eax, [ebp - 0x20]
+0x764000b1:     push            eax
+0x764000b2:     push            ecx
+0x764000b3:     push            ecx
+0x764000b4:     push            ecx
+0x764000b5:     push            edi
+0x764000b6:     call            dword ptr [0x765ec7c8]
+0x764000bc:     mov             ecx, eax
+0x764000be:     cmp             ecx, 0x103
+0x764000c4:     je              0x76431d1a
+0x764000ca:     test            ecx, ecx
+0x764000cc:     js              0x76431d33
+0x764000d2:     test            esi, esi
+0x764000d4:     je              0x764000db
+0x764000d6:     mov             eax, dword ptr [ebp - 0x1c]
+0x764000d9:     mov             dword ptr [esi], eax
+0x764000db:     xor             eax, eax
+0x764000dd:     inc             eax
+0x764000de:     jmp             0x76400095
+0x764000e0:     cmp             ecx, edx
+0x764000e2:     je              0x7640008c
+0x764000e4:     test            esi, esi
+0x764000e6:     je              0x764000db
+0x764000e8:     and             dword ptr [ebp - 4], 0
+0x764000ec:     mov             eax, dword ptr [ebx + 4]
+0x764000ef:     mov             dword ptr [esi], eax
+0x764000f1:     mov             dword ptr [ebp - 4], 0xfffffffe
+0x764000f8:     jmp             0x764000db
+Function Size : 251
+Original Write File lpBuffer : API HOOKING
+ON WINDOWS 10 :)
+
