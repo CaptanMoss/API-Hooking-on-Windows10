@@ -1,0 +1,39 @@
+﻿  Source.c
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(13,70): warning C4047: 'function': 'LPDWORD' differs in levels of indirection from 'LPDWORD *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(13,47): warning C4024: 'WriteFile': different types for formal and actual parameter 4
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(36,56): warning C4047: '=': 'LPWSTR' differs in levels of indirection from 'FARPROC'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(41,78): warning C4133: '=': incompatible types - from 'LPWSTR' to 'uint64_t *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(45,41): warning C4133: 'function': incompatible types - from 'uint64_t *' to 'unsigned char *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(48,50): warning C4133: 'function': incompatible types - from 'uint64_t *' to 'unsigned char *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(51,35): warning C4133: 'function': incompatible types - from 'uint64_t *' to 'unsigned char *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(53,45): warning C4047: '=': '_WriteFile' differs in levels of indirection from 'uint64_t *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(71,1): warning C4029: declared formal parameter list different from definition
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(128,11): warning C4477: 'printf_s' : format string '%X' requires an argument of type 'unsigned int', but variadic argument 1 has type 'wchar_t *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(104,1): warning C4047: 'initializing': 'wchar_t *' differs in levels of indirection from 'uint64_t'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(165,34): warning C4047: '=': 'unsigned char *' differs in levels of indirection from 'uint64_t'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(171,13): warning C4002: too many arguments for function-like macro invocation 'relativeOpcode'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(174,31): warning C4013: '_calculateRelativeAddress' undefined; assuming extern returning int
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(177,70): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(187,86): warning C4047: '=': 'uint32_t' differs in levels of indirection from 'unsigned char *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(194,35): warning C4133: '=': incompatible types - from 'uint8_t *' to 'uint32_t *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(200,70): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(221,17): warning C4047: '=': 'uint64_t' differs in levels of indirection from 'uint32_t *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(222,23): warning C4047: 'function': 'const char *' differs in levels of indirection from 'uint64_t'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(222,19): warning C4024: 'strtol': different types for formal and actual parameter 1
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(250,39): warning C4133: '=': incompatible types - from 'unsigned char *' to 'uint64_t *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(273,62): warning C4047: 'function': 'int' differs in levels of indirection from 'BOOL (__stdcall *)(HANDLE,LPCVOID,DWORD,LPDWORD,LPOVERLAPPED)'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(273,47): warning C4024: '_getHookFunctionAddress': different types for formal and actual parameter 1
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(273,63): warning C4020: '_getHookFunctionAddress': too many actual parameters
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(282,37): warning C4047: '=': 'uint64_t *' differs in levels of indirection from 'uint32_t'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(274,1): warning C4047: 'initializing': 'int' differs in levels of indirection from 'unsigned char *'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(288,1): warning C4029: declared formal parameter list different from definition
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(289,1): warning C4047: 'initializing': 'unsigned char *' differs in levels of indirection from 'int'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(329,11): warning C4477: 'printf_s' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'LPCVOID'
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(331,18): warning C4090: 'function': different 'const' qualifiers
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(332,18): warning C4090: 'function': different 'const' qualifiers
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(346,39): warning C4090: 'function': different 'const' qualifiers
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(55): warning C4716: '_initialize': must return a value
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(225): warning C4716: '_calculateRelativeAddress': must return a value
+C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Source.c(285): warning C4716: '_trambolin': must return a value
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  API_Hooking.vcxproj -> C:\Users\ereborlugimli\Desktop\API_Hooking\API_Hooking\Debug\API_Hooking.exe
