@@ -1,3 +1,5 @@
+
+
 #pragma once
 #pragma warning(disable : 4996)
 
@@ -5,6 +7,6 @@
 #include <Windows.h>
 
 
-DWORD _initialize(unsigned int dll_hash, LPCSTR  lpProcName);
+DWORD _initialize(unsigned int dll_hash, LPCSTR  lpProcName, BOOL ishook);
 DWORD _inithook(int _control, unsigned char* _hookFuncAddres);
 

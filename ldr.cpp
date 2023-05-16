@@ -1,6 +1,5 @@
-#include "initial.h"
 #include "ldr.h"
-#include "djb2.h"
+#include <stdio.h>
 
 DWORD string_compare(PWSTR param1, PWSTR param2)
 {
@@ -14,7 +13,7 @@ DWORD string_compare(PWSTR param1, PWSTR param2)
 		pushad
 		pushfd
 		mov edi, esp
-	
+
 		xor eax, eax
 		xor ebx, ebx
 		xor ecx, ecx
@@ -24,7 +23,7 @@ DWORD string_compare(PWSTR param1, PWSTR param2)
 		mov ebx, [param2]
 
 		loop1:
-			mov dl, [eax + ecx]
+		mov dl, [eax + ecx]
 			mov dh, [ebx + ecx]
 			inc ecx
 			cmp dl, 0
@@ -34,26 +33,26 @@ DWORD string_compare(PWSTR param1, PWSTR param2)
 			jl _condition1
 			jg _condition2
 
-		_find : //s1 == s2
-			cmp dh, 0
+			_find : //s1 == s2
+		cmp dh, 0
 			jne _condition1
 			mov edx, 0x1
 			jmp far ayh
 
-		_condition1 : // s1 < s2
-			mov edx, 0x2
+			_condition1 : // s1 < s2
+		mov edx, 0x2
 			jmp far ayh
 
-		_condition2 : // s1 > s2
-			mov edx, 0x3
+			_condition2 : // s1 > s2
+		mov edx, 0x3
 			jmp far ayh
 
-		ayh :
-			mov _ret, edx
+			ayh :
+		mov _ret, edx
 			mov esp, edi
 			popfd
 			popad
-	
+
 
 	}
 #endif
@@ -92,33 +91,30 @@ DWORD _findDllAddress(unsigned int dll)
 		nop
 
 		loop1 :
-			mov ecx, dword ptr[ebx - 0x8 + 0x2C + 0x4]		//BaseDllName
+		mov ecx, dword ptr[ebx - 0x8 + 0x2C + 0x4]		//BaseDllName
 			cmp ecx, _NULL_dll
 			mov esi, [ebx - 0x8 + 0x18]						//Dllbase
 			je ayh
 			push ecx
 			push dll
-			call djb2 
+			call djb2
 			mov ebx, [ebx]
 			cmp eax, 0x1
 			jne loop1
 			jz _find
 
 			_find :
-				mov esi, esi
-				mov dll_base, esi
-				jmp ayh
-		ayh:
-			mov esp, edi
+		mov esi, esi
+			mov dll_base, esi
+			jmp ayh
+			ayh :
+		mov esp, edi
 			popfd
 			popad
 
-		
+
 	}
 #endif
-	
-
-	printf_s("Base Adresi : 0x%lX\n", dll_base);
 
 	return dll_base;
 }
@@ -139,7 +135,7 @@ DWORD _findFunctionAddress(DWORD dll, LPCSTR function)
 		pushfd
 
 		mov edi, esp
-		
+
 		sub esp, 0x14
 
 		mov[edi - 0x4], eax			// Dll Base
@@ -176,7 +172,7 @@ DWORD _findFunctionAddress(DWORD dll, LPCSTR function)
 
 		loop1 :
 		mov eax, [edx + esi * 4]
-			add eax, ebx 
+			add eax, ebx
 			push eax
 			push function
 			call string_compare
@@ -191,50 +187,74 @@ DWORD _findFunctionAddress(DWORD dll, LPCSTR function)
 			inc esi
 			jne loop1
 
-		_find:
-				xor eax, eax
-				xor ebx, ebx
-				xor ecx, ecx
-				xor edx,edx
-				mov eax, [edi - 0x14]
-				add esi, esi
-				add eax, esi
-				mov edx, [edi - 0x4]
-				add eax, edx
-				mov cx,word ptr [eax]
-				add cx,cx
-				add cx,cx 
-				mov ebx, [edi - 0xC]
-				add ebx,ecx 
-				add ebx,edx 
-				mov ebx, [ebx]
-				add edx, ebx
-				mov function_address, edx
-				jmp ayh
+			_find :
+		xor eax, eax
+			xor ebx, ebx
+			xor ecx, ecx
+			xor edx, edx
+			mov eax, [edi - 0x14]
+			add esi, esi
+			add eax, esi
+			mov edx, [edi - 0x4]
+			add eax, edx
+			mov cx, word ptr[eax]
+			add cx, cx
+			add cx, cx
+			mov ebx, [edi - 0xC]
+			add ebx, ecx
+			add ebx, edx
+			mov ebx, [ebx]
+			add edx, ebx
+			mov function_address, edx
+			jmp ayh
 
-		ayh:
-			add esp, 0x14
-			mov esp, edi 
+			ayh :
+		add esp, 0x14
+			mov esp, edi
 			popfd
 			popad
 	}
 #endif
-	printf_s("%s Function Adresi : 0x%lX\n", function, function_address);
+
 	return function_address;
+}
+
+DWORD djb2(unsigned int* dll_hash, PWSTR word)
+{
+	unsigned int hash = 5381;
+	int c;
+	unsigned int dhash = reinterpret_cast<unsigned int>(dll_hash);
+
+
+	while ((c = *word++))
+	{
+		if (isupper(c))
+		{
+			c = c + 32;
+		}
+
+		hash = ((hash << 5) + hash) + c;
+	}
+
+	if (dhash == hash)
+		return 0x1;
+	else
+		return 0x0;
 }
 
 /*LdrLoadDll: This is a low-level function to load a DLL into a process, just like LoadLibrary.
 Normal programs use LoadLibrary, and the presence of this import may indicate a program that is attempting to be stealthy.*/
 
-void _LoadLibrary(wchar_t ldrstring[]) //give Dll Name
+void _LoadLibrary(const wchar_t* ldrstring) //give Dll Name
 {
 	UNICODE_STRING ldrldll;
-	
-	
-	_RtlInitUnicodeString _pRtlInitUnicodeString = (_RtlInitUnicodeString)_initialize(djb2_values[0], "RtlInitUnicodeString"); //Guloader veya ADVobfuscator ekler
-	_LdrLoadDll _pLdrLoadDll = (_LdrLoadDll)_initialize(djb2_values[0], "LdrLoadDll");
+
+
+	_RtlInitUnicodeString _pRtlInitUnicodeString = (_RtlInitUnicodeString)_initialize(djb2_values[0], (LPCSTR)"RtlInitUnicodeString", 0);
+	_LdrLoadDll _pLdrLoadDll = (_LdrLoadDll)_initialize(djb2_values[0], (LPCSTR)"LdrLoadDll", 0);
 
 	(_RtlInitUnicodeString)_pRtlInitUnicodeString(&ldrldll, ldrstring);
 	HANDLE _dllModule = NULL;
 	(_LdrLoadDll)_pLdrLoadDll(NULL, 0, &ldrldll, &_dllModule);
+
 }

@@ -1,15 +1,14 @@
-﻿#include "initial.h"
 #include "hook.h"
 #include "ldr.h"
 
 
 
-DWORD _initialize(unsigned int dll_hash, LPCSTR  lpProcName) 
+DWORD _initialize(unsigned int dll_hash, LPCSTR  lpProcName, BOOL ishook)
 {
 	DWORD _handle = NULL;
 
 	_handle = _findDllAddress(dll_hash);
-	   
+
 	if (_handle == NULL)
 	{
 		return 0x0;
@@ -17,16 +16,17 @@ DWORD _initialize(unsigned int dll_hash, LPCSTR  lpProcName)
 
 	DWORD _functionAddress = NULL;
 
-	_functionAddress = _findFunctionAddress(_handle, lpProcName); 
+	_functionAddress = _findFunctionAddress(_handle, lpProcName);
 
 	if (_functionAddress == NULL)
 	{
 		return 0x0;
 	}
+	if ((dll_hash == djb2_values[1] || dll_hash == djb2_values[7]) && ishook)
+		_functionAddress = _getFunctionAddress(_functionAddress);// kernel32.dll ve advapi32.dll
 
-	_hookInfo._oldFunction = _getFunctionAddress(_functionAddress);
-
-	return _hookInfo._oldFunction;
+	_hookInfo._oldFunction = _functionAddress;
+	return _functionAddress;
 }
 
 
@@ -43,7 +43,7 @@ DWORD _inithook(int _control, unsigned char* _hookFuncAddres) //_control for pri
 	DWORD _protection = 0;
 	_protection = _allocation(_hookInfo._oldFunction, _size, _control);
 
-	_trambolin(_hookInfo._oldFunction,_hookFuncAddres, _architecture, _size, _protection);
+	_trambolin(_hookInfo._oldFunction, _hookFuncAddres, _architecture, _size, _protection);
 
 	return  _hookInfo._newFunction;
 
@@ -115,7 +115,7 @@ uint64_t _getFunctionAddress(DWORD _fAddress)
 			_find2 :
 		mov edx, [eax + 1]
 			add edx, 5
-			add edx,eax
+			add edx, eax
 			mov dword ptr[_getAddress], edx
 			jmp ayh
 
@@ -125,9 +125,6 @@ uint64_t _getFunctionAddress(DWORD _fAddress)
 			popad
 
 	}
-
-	//printf_s("Real Function Address : 0x%X\n", _getAddress);
-
 	return _getAddress;
 #endif
 }
@@ -158,7 +155,7 @@ int _getSize(unsigned char* _fAddress, int _control)
 	uint32_t* _getRel;
 	uint32_t diff;
 
-	unsigned __int64 *  _prologOpcode = NULL;
+	unsigned __int64* _prologOpcode = NULL;
 
 	_hookInfo._relativeCount = 0;
 
@@ -172,21 +169,18 @@ int _getSize(unsigned char* _fAddress, int _control)
 #endif
 
 	addr = _fAddress;
-	size_t count = cs_disasm(g_capstone, addr, 0x10000, (uintptr_t)addr, 0, &insn); //64 bitde adres boyutundan dolayı patlıyor tekrar bak
+	size_t count = cs_disasm(g_capstone, addr, 0x10000, (uintptr_t)addr, 0, &insn);
 
-	if (count > 0 )
+	if (count > 0)
 	{
 		for (j = 0; j < count; j++)
 		{
 			_opcodeValue = insn[j].address;
 			_bytes = &insn[j].bytes[0];
 
-
-			if (*(_opcodeValue) == 0x8B && *(_opcodeValue+1) == 0xFF && *(_opcodeValue+2) == 0x55 && *(_opcodeValue+3) == 0x8B && *(_opcodeValue+4) == 0xEC)
+			if (addr != _opcodeValue && *(_opcodeValue) == 0x8B && *(_opcodeValue + 1) == 0xFF && *(_opcodeValue + 2) == 0x55 && *(_opcodeValue + 3) == 0x8B && *(_opcodeValue + 4) == 0xEC)
 				break;
 
-
-			size += insn[j].size;
 			if (findOpcode(_opcodeValue, 0x0) && findOpcode(_opcodeValue, 0x1) && findOpcode(_opcodeValue, 0x2) && findOpcode(_opcodeValue, 0x3))
 				break;
 
@@ -222,6 +216,9 @@ int _getSize(unsigned char* _fAddress, int _control)
 					*(uint32_t*)(_opcodeValue + 2) = _hookInfo._relativeValue[inc++];
 				}
 			}
+
+			size += insn[j].size;
+
 			if (_control == 0x0)
 				printf("0x%"PRIx64":\t%s\t\t%s\t\n", insn[j].address, insn[j].mnemonic, insn[j].op_str);
 		}
@@ -229,8 +226,6 @@ int _getSize(unsigned char* _fAddress, int _control)
 	}
 	else
 		printf("ERROR: Failed to disassemble given code!\n");
-
-	printf_s("Function Size : %d\n", size);
 
 	return size;
 }
@@ -246,7 +241,7 @@ int _calculateRelativeAddress(uint32_t* _address)
 	_hookInfo._relativeCount = _hookInfo._relativeCount + 1;
 }
 
-int _allocation(unsigned char* _fAddress, size_t _functionSize,int _control)
+int _allocation(unsigned char* _fAddress, size_t _functionSize, int _control)
 {
 	unsigned char* _newFunctionAddress = _fAddress - _functionSize - 0x400;
 	unsigned char* _newFunction = NULL;
@@ -259,14 +254,13 @@ int _allocation(unsigned char* _fAddress, size_t _functionSize,int _control)
 
 	memset(_newFunction, 0x90, _functionSize + 0x20);
 	memcpy(_newFunction, _fAddress, _functionSize);
-	
-	if(_control != 0x1)
+
+	if (_control != 0x1)
 		_getSize(_newFunction, _control); //fix relative adress and print
-	
+
 	DWORD _protection = 0;
 	if (!VirtualProtect(_fAddress, _functionSize, PAGE_EXECUTE_READWRITE, &_protection))
 	{
-		printf_s("%d", GetLastError());
 		VirtualFree(_newFunction, _functionSize + 0x20, MEM_RELEASE);
 	}
 
@@ -282,12 +276,12 @@ void _trambolin(unsigned char* _fAddress, unsigned char* _hookFuncAddres, int _a
 {
 
 #if defined(__x86_64__) || defined(_M_X64) 
-		//mov rax, 64BIT_FUNCTION_ADDRESS
-		//jmp rax
-		//*_fAddress = (unsigned char)0x48;//rax
-		//*(_fAddress + 1) = (unsigned char)0xB8;//mov
-		//*(long long int*)(_fAddress + 2) = (long long int)_hookFuncAddres; //bunu parametre olarak gönder 
-		//*(unsigned short*)(_fAddress + 10) = 0xE0FF;
+	//mov rax, 64BIT_FUNCTION_ADDRESS
+	//jmp rax
+	//*_fAddress = (unsigned char)0x48;//rax
+	//*(_fAddress + 1) = (unsigned char)0xB8;//mov
+	//*(long long int*)(_fAddress + 2) = (long long int)_hookFuncAddres; //bunu parametre olarak gönder 
+	//*(unsigned short*)(_fAddress + 10) = 0xE0FF;
 #elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
 	uint32_t _address = _getHookFunctionAddress(_hookFuncAddres); //architectureyi burada kullan
 	int _JMPOffset = _fAddress - _address;
@@ -311,10 +305,10 @@ int _getHookFunctionAddress(int _fAddress)
 
 	memset(_getOffset, '\0', sizeof(char) * 4);
 
-	
+
 	if (*_adress != 0xE9) //control for relative address
 		return _adress;
-	
+
 	for (int i = 0; i < 5; i++)
 	{
 		if (_adress[i] == 0xE9 || _adress[i] == 0x00) // jmp and null

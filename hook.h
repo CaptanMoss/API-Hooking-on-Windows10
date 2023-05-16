@@ -1,3 +1,6 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
 #pragma once
 
 	//install capstone
@@ -26,6 +29,7 @@
 		uint64_t* _hookFunction; //Hooked Function Address
 		uint64_t _relativeValue[MAX_RELATIVE];
 		uint8_t _relativeCount;
+		uint8_t _FuncSize;
 	};
 
 
@@ -38,3 +42,6 @@
 	void _trambolin(unsigned char* _fAddress, unsigned char* _hookFuncAddres, int _arch, size_t _size, DWORD _protection);
 	int _getHookFunctionAddress(int _fAddress);
 
+#ifdef __cplusplus
+}
+#endif
