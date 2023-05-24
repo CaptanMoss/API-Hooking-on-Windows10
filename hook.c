@@ -31,7 +31,7 @@ DWORD _initialize(unsigned int dll_hash, LPCSTR  lpProcName, BOOL ishook)
 
 
 
-DWORD _inithook(int _control, unsigned char* _hookFuncAddres) //_control for print
+DWORD _inithook(int _control, unsigned char* _hookFuncAddres) 
 {
 	int _architecture = 0;
 	_architecture = _processArchitectureInfo();
@@ -283,7 +283,7 @@ void _trambolin(unsigned char* _fAddress, unsigned char* _hookFuncAddres, int _a
 	//*(long long int*)(_fAddress + 2) = (long long int)_hookFuncAddres; //bunu parametre olarak gönder 
 	//*(unsigned short*)(_fAddress + 10) = 0xE0FF;
 #elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
-	uint32_t _address = _getHookFunctionAddress(_hookFuncAddres); //architectureyi burada kullan
+	uint32_t _address = _getHookFunctionAddress(_hookFuncAddres); 
 	int _JMPOffset = _fAddress - _address;
 	_JMPOffset = -_JMPOffset;
 	_JMPOffset = _JMPOffset - 0x5;
