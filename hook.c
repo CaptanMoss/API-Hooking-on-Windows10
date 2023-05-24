@@ -280,7 +280,7 @@ void _trambolin(unsigned char* _fAddress, unsigned char* _hookFuncAddres, int _a
 	//jmp rax
 	//*_fAddress = (unsigned char)0x48;//rax
 	//*(_fAddress + 1) = (unsigned char)0xB8;//mov
-	//*(long long int*)(_fAddress + 2) = (long long int)_hookFuncAddres; //bunu parametre olarak gönder 
+	//*(long long int*)(_fAddress + 2) = (long long int)_hookFuncAddres; 
 	//*(unsigned short*)(_fAddress + 10) = 0xE0FF;
 #elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
 	uint32_t _address = _getHookFunctionAddress(_hookFuncAddres); 
