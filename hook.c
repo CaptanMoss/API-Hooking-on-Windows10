@@ -129,7 +129,7 @@ uint64_t _getFunctionAddress(DWORD _fAddress)
 #endif
 }
 
-int _processArchitectureInfo() //inline assembly yap
+int _processArchitectureInfo() 
 {
 	wchar_t  lpFilename[MAX_PATH];
 
